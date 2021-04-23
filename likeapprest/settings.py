@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'O2FV91Zww85lBaXOuUMLKXx_9203k3klvRVt_PO9AcBjmYiNpEuCZ7mLCyHHvdFniDu_GHAp-YGPo2njPCKUwAgCbBX4m4W5cysCMqDCSZ5O0MV2FRMr0iKIhlQednc3_pNVCwVGKEaFaZ62_V0xEKctEJedI8QjEa3-EG1dRGVizbdve3ykHPlB7Q2CPG3iiiTutffq7y4cuovlJXw7IviA2ogc23a7gRMI9IpABw_RM_sZT-pd6inLsBBxhA0dI0c0jxRUm2Ucfr-iFsjnxGVEQsVZLaiMdX1Cui68ioXXA5_FINpjfs3YBUR8guGaq6awAa0DW1e1nM2c3wuQng'
+SECRET_KEY = 'O2FV91Zww85lBaXOuUMLKXx9203k3klvRVt_PO9AcBjmYiNpEuCZ7mLCyHHvdFniDu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,10 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # DRF
     'authentication',
     'rest_framework',
-    'publications'
+    'publications',
+    'likeapp'
 ]
 
 # Auth user model to use
@@ -50,9 +50,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
         ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'authentication.backend.JWTAuthentication',
-        )
+    ]
 }
 
 MIDDLEWARE = [

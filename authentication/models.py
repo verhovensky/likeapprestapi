@@ -11,7 +11,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 class UserManager(BaseUserManager):
     """
-    Declare our own manager, redeclare user creation method
+    own manager, redeclare user creation method
     """
 
     def _create_user(self, username, email, password=None, **extra_fields):
@@ -30,7 +30,7 @@ class UserManager(BaseUserManager):
 
     def create_user(self, username, email, password=None, **extra_fields):
         """
-        Returns newly created regular user.
+        created regular user.
         """
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
@@ -39,7 +39,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, username, email, password, **extra_fields):
         """
-        Returns newly created admin user.
+        created admin user.
         """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -97,9 +97,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         Generate JWT that lasts 30 days
         """
         dt = datetime.now() + timedelta(days=30)
-
-        # urlsafe base64 encode key
-        #secret = base64.urlsafe_b64encode(settings.SECRET_KEY)
 
         token = jwt.encode({
             'id': self.pk,

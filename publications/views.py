@@ -1,15 +1,12 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from authentication.backend import JWTAuthentication
 from .serializer import PublicationSerializer
 
 from .models import Publication
 
 
-class PublicationViewSet(viewsets.GenericViewSet, CreateModelMixin,
-                         # in case we need complete CRUD:
-                         RetrieveModelMixin, UpdateModelMixin, ListModelMixin):
+class PublicationViewSet(viewsets.ModelViewSet):
     authentication_classes = ((JWTAuthentication,))
     permission_classes = [permissions.IsAuthenticated]
     #queryset = Publication.objects.all().order_by('created')
