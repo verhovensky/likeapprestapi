@@ -1,11 +1,8 @@
-from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from authentication.models import User
+from likeapp.models import Like
+from django.db import models
 # Create your models here.
-
-
-# class Like(models.Model):
-#     owner = models.OneToOneField(User, on_delete=models.SET('Deleted'))
-#     created = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
 
 
 class Publication(models.Model):
@@ -14,10 +11,11 @@ class Publication(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated = models.DateTimeField(auto_now=True, verbose_name='Updated at')
-    #like = models.ManyToManyField(Like, related_name='like', blank=True)
+    likes = GenericRelation(Like)
 
     def __str__(self):
         return self.title
 
-    # def get_likes(self):
-    #     return self.like.count()
+    @property
+    def total_likes(self):
+        return self.likes.count()
