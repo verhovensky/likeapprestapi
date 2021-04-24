@@ -21,5 +21,5 @@ class PublicationSerializer(serializers.ModelSerializer):
                   'is_liked')
 
     def get_is_liked(self, obj) -> bool:
-        user = self.context.get('request').user
+        user = self.context.get('user')
         return is_liked(obj, user)

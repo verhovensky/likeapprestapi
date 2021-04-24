@@ -25,7 +25,8 @@ def remove_like(obj, user):
 
 
 def is_liked(obj, user) -> bool:
-    if not user.is_authenticated:
+    # auth ckeck?
+    if not user:
         return False
     obj_type = ContentType.objects.get_for_model(obj)
     likes = Like.objects.filter(
