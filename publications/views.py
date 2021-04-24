@@ -2,11 +2,13 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from authentication.backend import JWTAuthentication
 from .serializer import PublicationSerializer
+from likeapp.mixin import LikedMixin
 
 from .models import Publication
 
 
-class PublicationViewSet(viewsets.ModelViewSet):
+class PublicationViewSet(viewsets.ModelViewSet,
+                         LikedMixin):
     authentication_classes = ((JWTAuthentication,))
     permission_classes = [permissions.IsAuthenticated]
     #queryset = Publication.objects.all().order_by('created')
