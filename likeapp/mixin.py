@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,17 +8,13 @@ from publications.models import Publication
 
 # The logic of these two methods can be simplified to be the one
 
+
 class LikedMixin:
     @action(detail=True, methods=['POST'])
     def like(self, request, pk=None):
         user_pk = request.user.pk
-        try:
-            user = User.objects.get(pk=user_pk)
-            obj = Publication.objects.get(pk=pk)
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        except Publication.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        user = get_object_or_404(User, pk=user_pk)
+        obj = get_object_or_404(Publication, pk=pk)
         check_liked = is_liked(obj, user)
         if check_liked is True:
             return Response(status=status.HTTP_302_FOUND)
@@ -28,13 +25,8 @@ class LikedMixin:
     @action(detail=True, methods=['POST'])
     def unlike(self, request, pk=None):
         user_pk = request.user.pk
-        try:
-            user = User.objects.get(pk=user_pk)
-            obj = Publication.objects.get(pk=pk)
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        except Publication.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        user = get_object_or_404(User, pk=user_pk)
+        obj = get_object_or_404(Publication, pk=pk)
         check_liked = is_liked(obj, user)
         if check_liked is True:
             remove_like(obj, user)
