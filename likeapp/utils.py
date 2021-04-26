@@ -47,13 +47,13 @@ TIME_FORMATS = ['%Y-%m-%d',
                 '%Y-%m-%d %H:%M']
 
 
-def is_valid_datetime(time):
+def is_valid_date(time):
     if time is None:
         return None
     for time_format in TIME_FORMATS:
         try:
-            obj = datetime.datetime.strptime(time, time_format)
-            with_tz = obj.astimezone(timezone)
-            return with_tz
+            obj_dt = datetime.datetime.strptime(time, time_format).astimezone(timezone)
+            day = obj_dt.date()
+            return day
         except ValueError as e:
             return e
