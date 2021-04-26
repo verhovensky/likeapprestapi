@@ -3,10 +3,9 @@ from .models import Like
 
 
 class LikeSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(
-        many=False,
-        queryset=Like.objects.all())
+    user = serializers.StringRelatedField(
+        many=False)
 
     class Meta:
         model = Like
-        fields = ('pk', 'content_object', 'user')
+        fields = ('pk', 'user', 'created_at')

@@ -1,7 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-
 from .models import Like
+import datetime
+# Bishkek Time zone
+import pytz
+timezone = pytz.timezone("Asia/Bishkek")
 
 User = get_user_model()
 
@@ -32,3 +35,25 @@ def is_liked(obj, user) -> bool:
     likes = Like.objects.filter(
         content_type=obj_type, object_id=obj.id, user=user)
     return likes.exists()
+
+# Validate input datetime passed in request.data
+
+
+TIME_FORMATS = ['%Y-%m-%d',
+                '%Y %m %d',
+                '%Y-%m-%d %H',
+                '%Y-%m-%d %H:%M',
+                '%Y %m %d %H:%M',
+                '%Y-%m-%d %H:%M']
+
+
+def is_valid_datetime(time):
+    if time is None:
+        return None
+    for time_format in TIME_FORMATS:
+        try:
+            obj = datetime.datetime.strptime(time, time_format)
+            with_tz = obj.astimezone(timezone)
+            return with_tz
+        except ValueError as e:
+            return e

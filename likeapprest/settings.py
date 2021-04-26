@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'authentication',
     'rest_framework',
     'publications',
-    'likeapp'
+    'likeapp',
+    'django_extensions'
 ]
 
 # Auth user model to use
@@ -123,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 
