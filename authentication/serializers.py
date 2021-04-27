@@ -1,5 +1,4 @@
-#from rest_framework.authentication import authenticate
-from django.contrib.auth import authenticate
+from rest_framework.authentication import authenticate
 from rest_framework import serializers
 from .models import User
 
@@ -57,8 +56,8 @@ class LoginSerializer(serializers.Serializer):
             )
 
         try:
-            user = User.objects.get(email=email, password=password)
-            #user = authenticate(username=email, password=password)
+            # declare email as username for get_by_natural_key method
+            user = authenticate(username=email, password=password)
             if user:
                 try:
                     if user is None:
