@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from .models import Like
-import datetime
+# import datetime
 # Bishkek Time zone
-import pytz
-timezone = pytz.timezone("Asia/Bishkek")
+# import pytz
+# timezone = pytz.timezone("Asia/Bishkek")
 
 User = get_user_model()
 
@@ -46,14 +46,14 @@ TIME_FORMATS = ['%Y-%m-%d',
                 '%Y %m %d %H:%M',
                 '%Y-%m-%d %H:%M']
 
-
-def is_valid_date(time):
-    if time is None:
-        return None
-    for time_format in TIME_FORMATS:
-        try:
-            obj_dt = datetime.datetime.strptime(time, time_format).astimezone(timezone)
-            day = obj_dt.date()
-            return day
-        except ValueError as e:
-            return e
+# in case we need more precise statistics
+# def is_valid_datetime(time):
+#     if time is None:
+#         return None
+#     for time_format in TIME_FORMATS:
+#         try:
+#             obj_dt = datetime.datetime.strptime(time, time_format).astimezone(timezone)
+#             day = obj_dt.date()
+#             return day
+#         except ValueError as e:
+#             return e
