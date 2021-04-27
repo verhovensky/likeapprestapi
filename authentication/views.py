@@ -1,4 +1,5 @@
 from rest_framework import status
+from django.core.cache.backends import locmem
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -59,3 +60,7 @@ class UserViewSet(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+# class ActivityViewSet(ListCreateAPIView):
+#     def list(self, request, *args, **kwargs):

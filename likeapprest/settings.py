@@ -64,6 +64,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+    'authentication.middleware.UpdateLastActivityMiddleware',
 ]
 
 ROOT_URLCONF = 'likeapprest.urls'
@@ -131,6 +135,22 @@ USE_L10N = True
 
 USE_TZ = True
 
+# CACHE
+
+CACHE = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'locmemcahce',
+        'TIMEOUT': 480,
+        'OPTIONS': {
+            'MAX_ENTRIES': 2000,
+        }
+    }
+}
+
+# CACHE_MIDDLEWARE_ALIAS = 'forusers'
+# CACHE_MIDDLEWARE_SECONDS = 480
+#CACHE_MIDDLEWARE_KEY_PREFIX =
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
