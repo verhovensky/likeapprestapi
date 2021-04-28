@@ -4,6 +4,7 @@ Featuring user sing up, registration, login, publication creation/deletion, publ
 
 - JWT authentication
 - User registration and sing up
+- Publication creation (always made by user)
 - Publication like/unlike
 - User/publications/likes statistics
 
