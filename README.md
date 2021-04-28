@@ -13,8 +13,8 @@ Requires:
 - djangorestframework==3.12.4
 
 ## Install
-Make venv/pipenv
-Connect your favourite DB backend
+Make venv/pipenv<br/>
+Connect your favourite DB backend<br/>
 Then in project folder:
 ```sh
 pip install -r requirements.txt
