@@ -15,13 +15,13 @@ Requires:
 ## Install
 Make venv/pipenv<br/>
 Connect your favourite DB backend<br/>
+(Optional) Adjust timezone settings in settings.py to fit your needs
 Then in project folder:
 ```sh
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 ```
-(Optional) Adjust timezone settings in settings.py to fit your needs
 
 ## License
 
