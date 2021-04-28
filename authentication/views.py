@@ -64,4 +64,3 @@ class UserViewSet(ListCreateAPIView):
 
 # class ActivityViewSet(ListCreateAPIView):
 #     def list(self, request, *args, **kwargs):
-#         print(1)
