@@ -14,6 +14,7 @@ Requires:
 
 ## Install
 Make venv/pipenv
+Connect your favourite DB backend
 Then in project folder:
 ```sh
 pip install -r requirements.txt
