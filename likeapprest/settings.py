@@ -53,6 +53,10 @@ REST_FRAMEWORK = {
         ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'authentication.backend.JWTAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer'
     ]
 }
 

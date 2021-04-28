@@ -18,12 +18,11 @@ class UpdateLastActivityMiddleware(object):
             user_data.update({'name': a[0].username,
                               'time': str(datetime.datetime.now(tz=tz)),
                               'endpoint': request.path})
-        # no exceptions occur yet, let it be here nevertheless
-        except Exception as e:
-            raise Exception('Something went wrong') from e
-        if a:
             cache.get_or_set(user_data['name'], user_data)
-            #print(cache.get('bulat'))
+        # no exceptions occur yet, let it be here nevertheless
+        except TypeError as e:
+            pass
+            # raise TypeError('No data') from e
 
     def __init__(self, get_response):
         self.get_response = get_response
