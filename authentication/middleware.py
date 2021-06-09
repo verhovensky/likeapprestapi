@@ -14,11 +14,14 @@ class UpdateLastActivityMiddleware(object):
             'The UpdateLastActivityMiddleware requires authentication middleware to be installed.'
         try:
             a = auth.authenticate(request=request)
-            user_data = {}
-            user_data.update({'name': a[0].username,
-                              'time': str(datetime.datetime.now(tz=tz)),
-                              'endpoint': request.path})
-            cache.get_or_set(user_data['name'], user_data)
+            if a is None:
+                pass
+            else:
+                user_data = {}
+                user_data.update({'name': a[0].username,
+                                  'time': str(datetime.datetime.now(tz=tz)),
+                                  'endpoint': request.path})
+                cache.get_or_set(user_data['name'], user_data)
         # no exceptions occur yet, let it be here nevertheless
         except TypeError as e:
             pass
