@@ -69,7 +69,16 @@ class LoginSerializer(serializers.Serializer):
                             'This user has been deactivated')
 
                 finally:
-                    return self.validated_data
+                    return {
+                        'username': user.username,
+                        'email': user.email,
+                        # 'is_staff': user.is_staff,
+                        # 'is_active': user.is_active,
+                        # 'last_login': user.last_login,
+                        # 'pk': user.pk,
+                        # 'is_superuser': user.is_superuser,
+                        'token': user.token,
+                    }
         except KeyError as e:
             raise serializers.ValidationError('Please provide a email and a password')
         except User.DoesNotExist:
