@@ -52,7 +52,7 @@ class LoginAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class UserViewSet(ListCreateAPIView):
+class UsersViewSet(ListCreateAPIView):
     """
     API endpoint that allows users to be viewed or edited.
     """

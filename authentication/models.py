@@ -82,6 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+    # if token already in request ??
     @property
     def token(self):
         return self._generate_jwt_token()

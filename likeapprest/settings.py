@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'publications',
     'likeapp',
-    'django_extensions'
+    'django_extensions',
+    'corsheaders',
 ]
 
 # Auth user model to use
@@ -72,7 +73,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     'authentication.middleware.UpdateLastActivityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
 
 ROOT_URLCONF = 'likeapprest.urls'
 
