@@ -8,6 +8,9 @@ from .models import User
 from .serializers import LoginSerializer, UserSerializer, RegistrationSerializer, ActivitySerializer
 
 
+# TODO: SMS code check on registration here or/and serializer
+
+
 class RegistrationAPIView(APIView):
     """
     Registers a new user.
@@ -32,6 +35,8 @@ class RegistrationAPIView(APIView):
             status=status.HTTP_201_CREATED,
         )
 
+
+# TODO: SMS check here or in serializer
 
 class LoginAPIView(APIView):
     """

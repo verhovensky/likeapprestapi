@@ -60,7 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(db_index=True, max_length=32, unique=True)
 
-    # TODO: About me CharField
+    # TODO: fields for city, phone_number, gender, in_search, pin_code, bool(visible), fk on posts
 
     email = models.EmailField(
         validators=[validators.validate_email],
