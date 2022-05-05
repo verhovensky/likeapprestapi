@@ -1,6 +1,7 @@
 !media/**/
 /authentication/migrations
 /publications/migrations
+/likeapp/migrations
 *.pyc
 *~
 __pycache__
