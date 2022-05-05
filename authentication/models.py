@@ -1,5 +1,4 @@
 import jwt
-import base64
 from datetime import datetime
 from datetime import timedelta
 
@@ -61,6 +60,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(db_index=True, max_length=32, unique=True)
 
+    # TODO: About me CharField
+
     email = models.EmailField(
         validators=[validators.validate_email],
         unique=True,
@@ -87,11 +88,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def token(self):
         return self._generate_jwt_token()
 
-    def get_full_name(self):
-        return self.username
-
-    def get_short_name(self):
-        return self.username
+    # def get_full_name(self):
+    #     return self.username
+    #
+    # def get_short_name(self):
+    #     return self.username
 
     def _generate_jwt_token(self):
         """
@@ -104,4 +105,4 @@ class User(AbstractBaseUser, PermissionsMixin):
             'exp': dt.utcfromtimestamp(dt.timestamp())
         }, settings.SECRET_KEY, algorithm='HS256')
 
-        return token.decode('utf-8')
+        return token

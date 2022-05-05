@@ -1,12 +1,11 @@
 from rest_framework import status
-from django.core.cache import cache
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User
-from .serializers import LoginSerializer, UserSerializer, RegistrationSerializer
+from .serializers import LoginSerializer, UserSerializer, RegistrationSerializer, ActivitySerializer
 
 
 class RegistrationAPIView(APIView):
@@ -52,7 +51,7 @@ class LoginAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class UsersViewSet(ListCreateAPIView):
+class UsersViewSet(ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -61,18 +60,18 @@ class UsersViewSet(ListCreateAPIView):
     serializer_class = UserSerializer
 
 
-class ActivityViewSet(ListCreateAPIView):
-    """
-    API endpoint that accepts username in parameters
-    Shows last activity of a user with given username.
-    """
-    permission_classes = [IsAuthenticated]
+class ActivityViewSet(ListAPIView):
 
-    def get(self, request, *args, **kwargs):
-        key = self.request.data['username']
-        data = cache.get(key)
-        if data is not None:
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            return Response('User has no recent activity records or cache expired',
-                            status=status.HTTP_200_OK)
+    permission_classes = [IsAuthenticated]
+    serializer_class = ActivitySerializer
+    queryset = User.objects.filter(last_login__isnull=False)
+
+    # def get(self, request, *args, **kwargs):
+    #     key = self.request.data['username']
+    #     key = self.request.user.username
+    #     data = cache.get(key)
+    #     if data is not None:
+    #         return Response(data, status=status.HTTP_200_OK)
+    #     else:
+    #         return Response('User has no recent activity records or cache expired',
+    #                         status=status.HTTP_200_OK)
