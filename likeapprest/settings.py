@@ -50,9 +50,12 @@ AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+        #'rest_framework.permissions.IsAuthenticated',
         ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'authentication.backend.JWTAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': [
@@ -72,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    'authentication.middleware.UpdateLastActivityMiddleware',
+    #'authentication.middleware.UpdateLastActivityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -137,7 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Bishkek'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -160,7 +163,7 @@ CACHE = {
 
 # CACHE_MIDDLEWARE_ALIAS = 'forusers'
 # CACHE_MIDDLEWARE_SECONDS = 480
-#CACHE_MIDDLEWARE_KEY_PREFIX =
+# CACHE_MIDDLEWARE_KEY_PREFIX =
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
