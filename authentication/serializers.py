@@ -32,7 +32,7 @@ class LoginSerializer(serializers.Serializer):
     Returns a JSON web token.
     """
     email = serializers.EmailField(write_only=True)
-    password = serializers.CharField(max_length=128, write_only=True)
+    password = serializers.CharField(max_length=32, write_only=True)
 
     # Ignore these fields if they are included in the request.
     username = serializers.CharField(max_length=32, read_only=True)
