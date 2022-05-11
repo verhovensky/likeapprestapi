@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'authentication',
     'rest_framework',
     'publications',
-    'likeapp',
     'django_extensions',
     'corsheaders',
 ]
