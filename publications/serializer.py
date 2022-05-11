@@ -1,25 +1,18 @@
 from rest_framework import serializers
-from .models import Publication
-from likeapp.utils import is_liked
+from .models import Publication, UserPublicationRelation
 from authentication.models import User
 
 
 class PublicationSerializer(serializers.ModelSerializer):
-    is_liked = serializers.SerializerMethodField()
-    author = serializers.PrimaryKeyRelatedField(
-        many=False,
-        queryset=User.objects.all())
+    total_likes = serializers.ReadOnlyField()
+    author = serializers.ReadOnlyField(source='author.username')
 
     class Meta:
         model = Publication
-        fields = ('pk',
-                  'title',
-                  'content',
-                  'created',
-                  'author',
-                  'total_likes',
-                  'is_liked')
+        fields = ('__all__')
 
-    def get_is_liked(self, obj) -> bool:
-        user = self.context.get('user')
-        return is_liked(obj, user)
+
+class RelationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserPublicationRelation
+        fields = ('publication', 'like', 'bookmarked')

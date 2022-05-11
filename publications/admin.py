@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Publication
+from .models import Publication, UserPublicationRelation
 
 
 class PublicationsAdmin(admin.ModelAdmin):
@@ -7,11 +7,10 @@ class PublicationsAdmin(admin.ModelAdmin):
     list_filter = ('created',)
 
 
-# class LikesAdmin(admin.ModelAdmin):
-#     list_display = ['owner', 'created']
-#     list_filter = ('created',)
-
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'publication', 'like', 'bookmarked')
 
 
 admin.site.register(Publication, PublicationsAdmin)
-# admin.site.register(Like, LikesAdmin)
+admin.site.register(UserPublicationRelation, LikeAdmin)
+

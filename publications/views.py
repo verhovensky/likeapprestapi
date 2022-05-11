@@ -1,36 +1,38 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions
+from rest_framework.mixins import UpdateModelMixin
 from authentication.backend import JWTAuthentication
-from .serializer import PublicationSerializer
-from likeapp.mixin import LikedMixin
+from .serializer import PublicationSerializer, RelationSerializer
+from django.db.models import Count
+from .models import Publication, UserPublicationRelation
 
-from .models import Publication
 
-
-class PublicationViewSet(viewsets.ModelViewSet,
-                         LikedMixin):
+class PublicationViewSet(viewsets.ModelViewSet):
     authentication_classes = ((JWTAuthentication,))
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Publication.objects.all()
     serializer_class = PublicationSerializer
+    queryset = Publication.objects.annotate(total_likes=Count('likes'))
+    # TODO: add filtering and ordering
+    # search_fields =
+    # filter_fields =
+    # ordering_fields =
 
-    def list(self, request, *args, **kwargs):
-        serializer_class = PublicationSerializer(self.queryset, many=True,
-                                                 context={"user": request.user})
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
+    def perform_create(self, serializer):
+        serializer.validated_data['author'] = self.request.user
+        serializer.save()
 
-    def retrieve(self, request, pk=None, *args, **kwargs):
-        single_publication = get_object_or_404(self.queryset, pk=pk)
-        serializer_class = PublicationSerializer(single_publication, context={"user": request.user})
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
 
-    def create(self, request, *args, **kwargs):
-        pub_data = self.request.data
-        serializer_class = PublicationSerializer(data={"title": pub_data['title'],
-                                                       "content": pub_data['content'],
-                                                       "author": self.request.user.pk})
-        serializer_class.is_valid(raise_exception=True)
-        serializer_class.save()
-        headers = self.get_success_headers(serializer_class.data)
-        return Response(serializer_class.data, status=status.HTTP_201_CREATED, headers=headers)
+class PublicationRelationView(viewsets.GenericViewSet,
+                              UpdateModelMixin):
+    queryset = UserPublicationRelation.objects.all()
+    authentication_classes = ((JWTAuthentication,))
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = RelationSerializer
+    lookup_field = 'publication'
+
+    def get_object(self):
+        # IntegrityError on ForeignConstraint failed (500)
+        obj, _ = UserPublicationRelation.objects.get_or_create(
+            user=self.request.user,
+            publication_id=self.kwargs['publication']
+        )
+        return obj
