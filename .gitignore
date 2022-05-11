@@ -12,5 +12,6 @@ dump.json
 .DS_Store
 test.py
 PLAN.txt
-resp2.html
-token.txt
+cmds.txt
+db.json
+mytoken.txt
