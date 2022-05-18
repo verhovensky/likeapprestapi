@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Publication, UserPublicationRelation
-from authentication.models import User
+from users.models import User
 
 
 class PublicationSerializer(serializers.ModelSerializer):

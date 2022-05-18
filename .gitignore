@@ -16,3 +16,7 @@ cmds.txt
 db.json
 mytoken.txt
 address.txt
+.env
+environ
+ttr.py
+client_secret.json

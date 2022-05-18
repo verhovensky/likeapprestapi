@@ -11,6 +11,17 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import datetime
+import environ
+from pathlib import Path
+from django.core.management.utils import get_random_secret_key
+
+
+env = environ.Env(
+    DEBUG=(int, 0)
+)
+# reading .env file
+environ.Env.read_env('.env')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +31,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'O2FV91Zww85lBaXOuUMLKXx9203k3klvRVt_PO9AcBjmYiNpEuCZ7mLCyHHvdFniDu'
+# SECRET_KEY = env.str('DJANGO_SECRET_KEY', default=get_random_secret_key())
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=['localhost', '.herokuapp.com'])
 
 # Application definition
 
@@ -37,15 +48,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authentication',
     'rest_framework',
     'publications',
     'django_extensions',
     'corsheaders',
+    'users',
+    'api',
+    'rest_framework_jwt',
+    'rest_framework_jwt.blacklist',
 ]
 
 # Auth user model to use
-AUTH_USER_MODEL = 'authentication.User'
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -55,7 +69,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'authentication.backend.JWTAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -74,10 +88,11 @@ MIDDLEWARE = [
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    #'authentication.middleware.UpdateLastActivityMiddleware',
+    # 'authentication.middleware.UpdateLastActivityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+# CORS settings
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
 )
@@ -149,15 +164,19 @@ USE_TZ = True
 
 # CACHE
 
-CACHE = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'locmemcahce',
-        'TIMEOUT': 480,
-        'OPTIONS': {
-            'MAX_ENTRIES': 2000,
+TEST_MEMCACHE = False
+if not DEBUG or TEST_MEMCACHE:
+    CACHES = {
+        'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
         }
     }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
 }
 
 # CACHE_MIDDLEWARE_ALIAS = 'forusers'
@@ -173,3 +192,27 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# JWT settings
+JWT_EXPIRATION_DELTA_DEFAULT = 2.628e+6  # 1 month in seconds
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(
+        days=env.int(
+            'DJANGO_JWT_EXPIRATION_DELTA',
+            default=JWT_EXPIRATION_DELTA_DEFAULT
+        )
+    ),
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_GET_USER_SECRET_KEY': lambda user: user.secret_key,
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'users.selectors.jwt_response_payload_handler',
+    'JWT_AUTH_COOKIE': 'jwt_token',
+    'JWT_AUTH_COOKIE_SAMESITE': 'None'
+}
+
+
+# Google OAuth2 settings
+
+# Google OAuth2 settings
+GOOGLE_OAUTH2_CLIENT_ID = env.str('DJANGO_GOOGLE_OAUTH2_CLIENT_ID')
+# GOOGLE_OAUTH2_CLIENT_SECRET = env.str('DJANGO_GOOGLE_OAUTH2_CLIENT_SECRET')
+GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
